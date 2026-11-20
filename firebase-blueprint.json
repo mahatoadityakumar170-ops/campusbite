@@ -1,0 +1,242 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated student profile and campus delivery preferences",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Student full name",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Verified Google account email",
+          "maxLength": 120
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "Google profile avatar URL",
+          "maxLength": 500
+        },
+        "phone": {
+          "type": "string",
+          "description": "Contact phone number for campus delivery",
+          "maxLength": 20,
+          "pattern": "^[0-9+\\-\\s]{7,20}$"
+        },
+        "campus": {
+          "type": "string",
+          "description": "Dehradun college or university campus",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "dropPointType": {
+          "type": "string",
+          "enum": ["Hostel Gate", "PG / Flat", "Classroom / Block"],
+          "description": "Preferred delivery drop-off type"
+        },
+        "dropPointDetail": {
+          "type": "string",
+          "description": "Hostel block, PG name, or classroom building",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Profile creation server timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Profile update server timestamp"
+        }
+      },
+      "required": ["uid", "displayName", "email", "createdAt", "updatedAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Student meal order for campus or hostel delivery",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Ordering student Firebase UID",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "customerName": {
+          "type": "string",
+          "description": "Recipient name",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "customerEmail": {
+          "type": "string",
+          "format": "email",
+          "description": "Recipient verified email",
+          "maxLength": 120
+        },
+        "phone": {
+          "type": "string",
+          "description": "Delivery contact number",
+          "maxLength": 20,
+          "pattern": "^[0-9+\\-\\s]{7,20}$"
+        },
+        "campus": {
+          "type": "string",
+          "description": "Selected campus in Dehradun",
+          "minLength": 2,
+          "maxLength": 80
+        },
+        "dropPointType": {
+          "type": "string",
+          "enum": ["Hostel Gate", "PG / Flat", "Classroom / Block"],
+          "description": "Delivery location category"
+        },
+        "dropPointDetail": {
+          "type": "string",
+          "description": "Specific hostel gate, room, or block",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "paymentMethod": {
+          "type": "string",
+          "enum": ["UPI on Delivery", "Cash on Delivery"],
+          "description": "Pay-on-delivery option"
+        },
+        "items": {
+          "type": "array",
+          "description": "Ordered meal line items (1-15 items)"
+        },
+        "subtotal": {
+          "type": "number",
+          "description": "Food subtotal in INR"
+        },
+        "deliveryFee": {
+          "type": "number",
+          "description": "Campus delivery fee in INR"
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "Total payable amount in INR"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional spice or gate instructions",
+          "maxLength": 200
+        },
+        "status": {
+          "type": "string",
+          "enum": ["confirmed", "preparing", "out_for_delivery", "delivered", "cancelled"],
+          "description": "Order fulfillment lifecycle state"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Order placement server timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Order update server timestamp"
+        }
+      },
+      "required": [
+        "userId",
+        "customerName",
+        "customerEmail",
+        "phone",
+        "campus",
+        "dropPointType",
+        "dropPointDetail",
+        "paymentMethod",
+        "items",
+        "subtotal",
+        "deliveryFee",
+        "totalAmount",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "OrderFeedback": {
+      "title": "OrderFeedback",
+      "description": "Post-order student satisfaction survey validating price, hygiene, and convenience",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Author student Firebase UID",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "orderId": {
+          "type": "string",
+          "description": "Referenced order document ID",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "priceRating": {
+          "type": "number",
+          "description": "Affordability rating (1-5)"
+        },
+        "hygieneRating": {
+          "type": "number",
+          "description": "Food hygiene & taste rating (1-5)"
+        },
+        "deliveryRating": {
+          "type": "number",
+          "description": "Campus delivery convenience rating (1-5)"
+        },
+        "wouldOrderAgain": {
+          "type": "boolean",
+          "description": "Repeat-order intent indicator"
+        },
+        "comment": {
+          "type": "string",
+          "description": "Optional student feedback note",
+          "maxLength": 300
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Feedback submission server timestamp"
+        }
+      },
+      "required": [
+        "userId",
+        "orderId",
+        "priceRating",
+        "hygieneRating",
+        "deliveryRating",
+        "wouldOrderAgain",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private student profile documents isolated to the owner"
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Student meal orders scoped by userId and accessible to pilot ops admins"
+    },
+    "/feedback/{feedbackId}": {
+      "schema": { "$ref": "#/entities/OrderFeedback" },
+      "description": "Post-order pilot feedback linked to a verified user order"
+    }
+  }
+}
